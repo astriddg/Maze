@@ -30,7 +30,6 @@ class Maze:
 		self.rows = rows
 		self.cols = cols
 		self.grid = {}
-		self.path = []
 
 	def generate(self):
 		self.reset()
@@ -44,7 +43,6 @@ class Maze:
 			neighbours = self.findNeighbours(self.current_cell)
 			if len(neighbours) >= 1: # may not work
 				neighbour = random.choice(neighbours)
-				print(neighbour[1])
 				if neighbour[1] == N:
 					self.current_cell.n_wall = False
 					neighbour[0].s_wall = False
@@ -63,13 +61,7 @@ class Maze:
 			else:
 				self.current_cell = cell_stack.pop()
 			
-		print(self.visited)
-
-		if self.current_cell == self.end:
-			self.path = cell_stack[:]
-
-		self.path.append(self.end)
-
+		self.end.e_wall = False
 
 
 	def reset(self):

@@ -25,13 +25,12 @@ class Game:
 		self.cols = cols
 
 	def __repr__(self):
-		for i in range(0, self.cols + 1):
-			self.grid[(0, i)] = BOTTOM_NO_RIGHT
-		for j in range(0, self.rows * 2 + 1):
+		for i in range(1, self.cols + 1):
+			self.grid[(0, i)] = self.grid[(self.rows * 2 + 1, self.cols + 1)] = BOTTOM_NO_RIGHT
+		for j in range(3, self.rows * 2 + 1):
 			self.grid[(j, 0)] = " |"
-		self.grid[(0, 0)] = "  "
-
-
+		for k in range(0, 3):
+			self.grid[(k, 0)] = "  "
 
 		return self.setGrid()
 
@@ -52,7 +51,7 @@ class Game:
 					self.grid[(r * 2 + 1, c+1)] = EMPTY
 					self.grid[((r + 1) * 2, c+1)] = EMPTY
 		
-		final_string = " "
+		final_string = ""
 		for r in range(0, self.rows * 2 + 1):
 			row_string = ""
 			for c in range(0, self.cols + 1):
@@ -63,9 +62,7 @@ class Game:
 
 
 	def checkState(self, cell):
-		if cell.row == self.rows-1 and cell.col == self.cols-1:
-			return SOUTH_AND_EAST
-		elif cell.row == self.rows-1:
+		if cell.row == self.rows-1:
 			if cell.e_wall:
 				return SOUTH_AND_EAST
 			else:
