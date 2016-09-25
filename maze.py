@@ -17,6 +17,10 @@ class Cell:
 		self.s_wall = True
 		self.e_wall = True
 		self.w_wall = True
+		self.visited = False
+		self.left = False
+		self.right = False
+		self.bottom = False
 
 	def closed(self):
 		return self.n_wall and self.s_wall and self.e_wall and self.w_wall
@@ -35,10 +39,10 @@ class Maze:
 		self.reset()
 		self.total = self.rows * self.cols
 		self.current_cell = self.start
-		self.visited = 1
+		self.covered = 1
 		cell_stack = []
 
-		while self.visited < self.total:
+		while self.covered < self.total:
 			
 			neighbours = self.findNeighbours(self.current_cell)
 			if len(neighbours) >= 1: # may not work
@@ -57,7 +61,7 @@ class Maze:
 					neighbour[0].w_wall = False
 				cell_stack.append(self.current_cell)
 				self.current_cell = neighbour[0]
-				self.visited += 1
+				self.covered += 1
 			else:
 				self.current_cell = cell_stack.pop()
 			
@@ -82,6 +86,9 @@ class Maze:
 					neighbour = self.grid[(temp_r, temp_c)]
 					neighbours.append((neighbour, d))
 		return neighbours
+
+
+
 
 
 
