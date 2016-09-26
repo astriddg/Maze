@@ -79,11 +79,11 @@ class Maze:
 		directions = [N, S, W, E]
 		neighbours = []
 		for d in directions:
-			temp_r, temp_c = current_cell.row + d[0], current_cell.col + d[1]
-			if temp_r >= 0 and temp_c >= 0 and temp_r < self.rows and temp_c < self.cols:
-				if self.grid[(temp_r, temp_c)].closed():
+			target_r, target_c = current_cell.row + d[0], current_cell.col + d[1]
+			if target_r >= 0 and target_c >= 0 and target_r < self.rows and target_c < self.cols:
+				if self.grid[(target_r, target_c)].closed():
 					" mon chien"
-					neighbour = self.grid[(temp_r, temp_c)]
+					neighbour = self.grid[(target_r, target_c)]
 					neighbours.append((neighbour, d))
 		return neighbours
 
