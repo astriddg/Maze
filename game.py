@@ -36,7 +36,6 @@ class Game:
 		self.initiated = True
 		self.current = self.maze.grid[(0, 0)]
 		self.maze.grid[(0, 0)].visited = True
-		print(self.current)
 		return self.setGrid()
 
 
@@ -58,31 +57,42 @@ class Game:
 						self.grid[(r * 2 + 1, c+1)] = designs.EMPTY
 						self.grid[((r + 1) * 2, c+1)] = designs.EMPTY
 				else:
-					if (neighbours == directions.U or neighbours == directions.B) and (check_state == directions.SOUTH_AND_EAST or check_state == directions.EAST):
+					if ((neighbours == directions.U or neighbours == directions.B) and
+						(check_state == directions.SOUTH_AND_EAST or check_state == directions.EAST)):
 						self.grid[(r * 2 + 1, c+1)] = designs.C_RIGHT
-					elif (neighbours == directions.U or neighbours == directions.B) and (check_state == directions.SOUTH_O or check_state == directions.NONE):
+					elif ((neighbours == directions.U or neighbours == directions.B) and
+						(check_state == directions.SOUTH_O or check_state == directions.NONE)):
 						self.grid[(r * 2 + 1, c+1)] = designs.C_EMPTY
-					elif (neighbours == directions.L or neighbours == directions.LB) and (check_state == directions.SOUTH_AND_EAST or check_state == directions.EAST):
+					elif ((neighbours == directions.L or neighbours == directions.LB) and 
+						(check_state == directions.SOUTH_AND_EAST or check_state == directions.EAST)):
 						self.grid[(r * 2 + 1, c+1)] = designs.CL_TOP_RIGHT
-					elif (neighbours == directions.L or neighbours == directions.LB) and (check_state == directions.SOUTH_O or check_state == directions.NONE):
+					elif ((neighbours == directions.L or neighbours == directions.LB) and 
+						(check_state == directions.SOUTH_O or check_state == directions.NONE)):
 						self.grid[(r * 2 + 1, c+1)] = designs.CL_EMPTY
-					elif (neighbours == directions.R or neighbours == directions.BR) and (check_state == directions.SOUTH_0 or check_state == directions.NONE):
+					elif ((neighbours == directions.R or neighbours == directions.BR) and 
+						(check_state == directions.SOUTH_O or check_state == directions.NONE)):
 						self.grid[(r * 2 + 1, c+1)] = designs.CR_EMPTY
-					elif (neighbours == directions.LR) and (check_state == directions.SOUTH_O or check_state == directions.NONE):
+					elif ((neighbours == directions.LR) and 
+						(check_state == directions.SOUTH_O or check_state == directions.NONE)):
 						self.grid[(r * 2 + 1, c+1)] = designs.CLR_EMPTY
 
-					if (neighbours == directions.B or neighbours == directions.LB or neighbours == directions.BR) and check_state == directions.EAST:
+					if ((neighbours == directions.B or neighbours == directions.LB or neighbours == directions.BR) and 
+						check_state == directions.EAST):
 						self.grid[((r + 1) * 2, c+1)] = designs.C_RIGHT
-					elif (neighbours == directions.B or neighbours == directions.LB or neighbours == directions.BR) and check_state == directions.NONE:
+					elif ((neighbours == directions.B or neighbours == directions.LB or neighbours == directions.BR) and 
+					check_state == directions.NONE):
 						self.grid[((r + 1) * 2, c+1)] = designs.C_EMPTY
-					elif (neighbours == directions.U or neighbours == directions.L or neighbours == directions.R or neighbours == directions.LR) and (check_state == directions.SOUTH_AND_EAST or check_state == directions.EAST):
-						self.grid[((r + 1) * 2, c+1)] = designs.C_RIGHT
-					elif (neighbours == directions.U or neighbours == directions.L or neighbours == directions.R or neighbours == directions.LR) and (check_state == directions.SOUTH_O or check_state == directions.NONE):
+					elif ((neighbours == directions.U or neighbours == directions.L or neighbours == directions.R or 
+						neighbours == directions.LR) and (check_state == directions.SOUTH_AND_EAST or 
+						check_state == directions.EAST)):
+						self.grid[((r + 1) * 2, c+1)] = designs.RIGHT
+					elif ((neighbours == directions.U or neighbours == directions.L or neighbours == directions.R or 
+						neighbours == directions.LR) and (check_state == directions.SOUTH_O or 
+						check_state == directions.NONE)):
 						self.grid[((r + 1) * 2, c+1)] = designs.EMPTY
 
 		
 		final_string = ""
-		print(self.grid)
 		for r in range(0, self.rows * 2 + 1):
 			row_string = ""
 			for c in range(0, self.cols + 1):
@@ -94,26 +104,26 @@ class Game:
 
 	def checkState(self, cell):
 		if not cell.visited:
-			print(str(cell.row) + " " + str(cell.col) + " " + "pas visite \n")
 			neighbours = False
 		else:
-			print(str(cell.row) + " " + str(cell.col) + " " + " VISITE \n")
-			if cell == self.current:
+			[w, e, s, n] = [directions.WEST, directions.EAST, directions.SOUTH, directions.NORTH]
+			if cell == self.maze.start:
+				print('on a trouve l\'entree') # What the hell is that??
 				neighbours = directions.L
-			elif self.maze.grid[(cell.row + directions.WEST[0], cell.col + directions.WEST[1])].visited:
-				if self.maze.grid[(cell.row + directions.EAST[0], cell.col + directions.EAST[1])].visited:
+			elif self.contained(cell, w) and not cell.w_wall and self.maze.grid[(cell.row + w[0], cell.col + w[1])].visited:
+				if self.contained(cell, e) and not cell.e_wall and self.maze.grid[(cell.row + directions.EAST[0], cell.col + directions.EAST[1])].visited:
 					neighbours = directions.LR
-				elif self.maze.grid[(cell.row + directions.SOUTH[0], cell.col + directions.SOUTH[1])].visited:
+				elif self.contained(cell, s) and not cell.s_wall and self.maze.grid[(cell.row + directions.SOUTH[0], cell.col + directions.SOUTH[1])].visited:
 					neighbours = directions.LB
 				else:
 					neighbours = directions.L
-			elif self.maze.grid[(cell.row + directions.EAST[0], cell.col + directions.EAST[1])].visited:
-				if self.maze.grid[(cell.row + directions.SOUTH[0], cell.col + directions.SOUTH[1])].visited:
+			elif self.contained(cell, e) and not cell.e_wall and self.maze.grid[(cell.row + directions.EAST[0], cell.col + directions.EAST[1])].visited:
+				if self.contained(cell, s) and not cell.s_wall and self.maze.grid[(cell.row + directions.SOUTH[0], cell.col + directions.SOUTH[1])].visited:
 					neighbours = directions.BR
 				else:
 					neighbours = directions.R
-			elif self.maze.grid[(cell.row + directions.SOUTH[0], cell.col + directions.SOUTH[1])].visited:
-				neighbours = B
+			elif self.contained(cell, s) and not cell.s_wall and self.maze.grid[(cell.row + directions.SOUTH[0], cell.col + directions.SOUTH[1])].visited:
+				neighbours = directions.B
 			else:
 				neighbours = directions.U
 
@@ -160,20 +170,24 @@ class Game:
 				if self.current.e_wall:
 					return False
 				direction = directions.EAST
-
+		print(' la direction est  ' + move)
 		target_row, target_col = self.current.row + direction[0], self.current.col + direction[1]
 
 		if target_row >= 0 and target_row < self.rows and target_col >= 0 and target_col < self.cols:
 			target = self.maze.grid[(target_row, target_col)]
 			target.visited = True
 			self.current = target
-			self.setGrid
-			print(self)
 
 
 			
 		else:
 			return false
+
+	def contained(self, cell, d):
+		if 0 <= (cell.row + d[0]) < self.rows and 0 <= (cell.col + d[1]) < self.cols:
+			return True
+		else:
+			return False
 
 
 

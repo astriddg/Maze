@@ -26,8 +26,9 @@ print(game)
 print('Use your arrows to control your robot. \n Use w to go up \n Use s to go down \n Use a to go left \n une d to go right.')
 
 while not game.over:
-	move = input('')
+	move = input('>')
 	game.analyse(move)
+	print(game)
 
 
 
