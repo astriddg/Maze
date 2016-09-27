@@ -7,12 +7,12 @@ width = ""
 height = ""
 start = "no"
 while start.lower() == "no":
-	while type(width) is not int or int(width) > 100 or int(width) < 5:
-		width = input('How wide do you want your maze to be? Choose a number between 5 and 100: \n > ')
+	while type(width) is not int or int(width) > 50 or int(width) < 5:
+		width = input('How wide do you want your maze to be? Choose a number between 5 and 50: \n > ')
 		width = int(width)
 
-	while type(height) is not int or int(height) > 100 or int(height) < 5:
-		height = input('And what about your maze\'s height? Once again, something between 5 and 100: \n > ')
+	while type(height) is not int or int(height) > 20 or int(height) < 5:
+		height = input('And what about your maze\'s height? Once again, something between 5 and 20: \n > ')
 		height = int(height)
 
 	game = Game(height, width)
@@ -29,6 +29,8 @@ while not game.over:
 	move = input('>')
 	game.analyse(move)
 	print(game)
+
+print('You\'ve won!')
 
 
 
